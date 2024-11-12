@@ -1,0 +1,16 @@
+services:
+  app-dev:
+    image: computer-use-demo  # build the image locally with `docker-compose build`
+    build:
+      context: .
+    environment:
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}  # pass the API key from environment
+    volumes:
+      - ./computer_use_demo:/home/computeruse/computer_use_demo  # mount local directory for development
+      - ${HOME}/.anthropic:/home/computeruse/.anthropic  # mount .anthropic directory
+    ports:
+      - "5900:5900"
+      - "8501:8501"
+      - "6080:6080"
+      - "8080:8080"
+    stdin_open: true  # interactive mode
