@@ -1,6 +1,6 @@
 services:
   app-dev:
-    image: computer-use-demo  # build the image locally with `docker-compose build`
+    image: app-dev  # build the image locally with `docker-compose build`
     build:
       context: .
     environment:
