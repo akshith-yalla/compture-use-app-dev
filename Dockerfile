@@ -39,6 +39,10 @@ RUN apt-get update && \
     # Userland apps
     sudo add-apt-repository ppa:mozillateam/ppa && \
     sudo apt-get install -y --no-install-recommends \
+    wget \
+    gpg \
+    software-properties-common \
+    apt-transport-https \
     libreoffice \
     firefox-esr \
     x11-apps \
@@ -50,6 +54,26 @@ RUN apt-get update && \
     pcmanfm \
     unzip && \
     apt-get clean
+
+# Add Microsoft's GPG key and VS Code repository
+RUN echo "deb http://archive.ubuntu.com/ubuntu/ focal main restricted universe multiverse" > /etc/apt/sources.list && \
+    apt-get update -o Debug::Acquire::http=true || (echo "APT update failed" && exit 1)
+
+# Install required dependencies
+RUN apt-get install -y wget gpg software-properties-common apt-transport-https || (echo "Failed to install basic dependencies" && exit 1)
+
+# Add Microsoft's GPG key and VS Code repository
+RUN curl -sSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+    echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list && \
+    apt-get update || (echo "Failed to add VSCode repository" && exit 1)
+
+# Install Visual Studio Code
+RUN apt-get install -y code || (echo "Failed to install Visual Studio Code" && exit 1)
+
+RUN sudo wget -O /usr/share/icons/hicolor/512x512/apps/code.png https://code.visualstudio.com/assets/images/code-stable.png
+
+# Clean up
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install noVNC
 RUN git clone --branch v1.5.0 https://github.com/novnc/noVNC.git /opt/noVNC && \
