@@ -9,8 +9,8 @@ services:
       - .env
     volumes:
       - ./computer_use_demo:/home/computeruse/computer_use_demo # mount local directory for development
-      - ${HOME}/.anthropic:/home/computeruse/.anthropic # mount .anthropic directory
       - $HOME/.config/gcloud/application_default_credentials.json:/home/computeruse/.config/gcloud/application_default_credentials.json
+      - ./data:/home/computeruse/data
     ports:
       - "5900:5900"
       - "8501:8501"
